@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="index.css" />
+    <script defer src="index.js"></script>
+  </head>
+
+  <body>
+    <main id="main-container">
+      <div>
+        <span>Freddy's Artisanal Halloween Candy Shop</span>
+        <img src="logo.svg" alt="Freddy's Logo" style="width: 50px" />
+      </div>
+
+      <form id="login-form">
+        <input
+          type="text"
+          name="username"
+          id="username"
+          class="login-form-field"
+          placeholder="Username"
+        />
+        <input
+          type="password"
+          name="password"
+          id="password"
+          class="login-form-field"
+          placeholder="Password"
+        />
+
+        <div id="login-error-msg-holder">
+          <p id="login-error-msg"></p>
+        </div>
+
+        <input type="submit" value="Login" id="login-form-submit" />
+      </form>
+    </main>
+  </body>
+</html>
