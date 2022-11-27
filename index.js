@@ -41,9 +41,11 @@ loginButton.addEventListener("click", (e) => {
 
 function checkIfLoggedIn() {
   const accessToken = localStorage.getItem("accessToken");
-  if (accessToken === null) {
-    window.location.href = "./index.html";
+  if (accessToken != null) {
+    window.location.href = "./src/pages/dashboard.html";
+  } else {
+    return false;
   }
 }
 
-//checkIfLoggedIn();
+checkIfLoggedIn();

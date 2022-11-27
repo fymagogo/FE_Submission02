@@ -4,11 +4,58 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard</title>
+    <link rel="stylesheet" href="../css/dashboard.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <script defer src="../js/dashboard.js"></script>
+    <script defer src="../js/util.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
 
   <body>
     <main id="main-container">
-      <p>Dashboard</p>
+      <div class="sidenav">
+        <img src="../../logo.svg" alt="Freddy's Logo" style="width: 50px" />
+        <a href="#">Dashboard</a>
+        <a href="../pages/orders.html">Orders</a>
+        <a href="#">Logout</a>
+      </div>
+      <div class="main">
+        <h3>Dashboard</h3>
+
+        <div class="grid-container">
+          <div class="grid-item">
+            <div class="metrics">
+              <div class="today-submetrics">
+                <h4>Today</h4>
+                <span>146/96 orders</span>
+              </div>
+              <div class="last-week-submetrics">
+                <h4>Last Week</h4>
+                <span>146/96 orders</span>
+              </div>
+              <div class="last-month-submetrics">
+                <h4>Last Month</h4>
+                <span>146/96 orders</span>
+              </div>
+            </div>
+          </div>
+          <div class="grid-item">
+            <canvas id="myChart"></canvas>
+          </div>
+          <div class="grid-item">
+            <h4>Bestsellers</h4>
+            <table>
+              <thead>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th># Units Sold</th>
+                <th>Revenue</th>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </main>
   </body>
 </html>
