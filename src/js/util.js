@@ -6,7 +6,7 @@ const logoutButton = document.getElementById("logout");
 function refreshToken() {
   const refreshToken = localStorage.getItem("refreshToken");
   if (refreshToken == null) {
-    window.location.href = "./index.html";
+    window.location.href = "../../index.html";
   }
   fetch("https://freddy.codesubmit.io/refresh", {
     method: "POST",

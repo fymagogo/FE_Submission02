@@ -15,7 +15,7 @@
     <main id="main-container">
       <div class="sidenav">
         <img src="../../logo.svg" alt="Freddy's Logo" style="width: 50px" />
-        <a href="#">Dashboard</a>
+        <a href="#" class="active">Dashboard</a>
         <a href="../pages/orders.html">Orders</a>
         <a href="#">Logout</a>
       </div>
@@ -25,21 +25,26 @@
         <div class="grid-container">
           <div class="grid-item">
             <div class="metrics">
-              <div class="today-submetrics">
+              <div id="today-submetrics">
                 <h4>Today</h4>
-                <span>146/96 orders</span>
+                <span></span>
               </div>
-              <div class="last-week-submetrics">
+              <div id="last-week-submetrics">
                 <h4>Last Week</h4>
-                <span>146/96 orders</span>
+                <span></span>
               </div>
-              <div class="last-month-submetrics">
+              <div id="last-month-submetrics">
                 <h4>Last Month</h4>
-                <span>146/96 orders</span>
+                <span></span>
               </div>
             </div>
           </div>
           <div class="grid-item">
+            <p id="graph-label"></p>
+            <label class="switch">
+              <input type="checkbox" id="toggle" />
+              <span class="slider round"></span>
+            </label>
             <canvas id="myChart"></canvas>
           </div>
           <div class="grid-item">
