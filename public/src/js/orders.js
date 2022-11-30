@@ -1,6 +1,28 @@
 "use strict";
 
-async function fetchData(page = 1, q = "") {
+let index = 0;
+let pages = [];
+let currentPage = 1;
+let numberOfPages = 1;
+let totalCount = 0;
+let query = "";
+let orders = [];
+const btnContainer = document.querySelector(".btn-container");
+const loaderContainer = document.querySelector(".loader-container");
+const loadingDiv = document.getElementById("loading");
+
+function displayLoading() {
+  loaderContainer.style.display = "block";
+  //loadingDiv.style.display = "block";
+}
+
+function hideLoading() {
+  loaderContainer.style.display = "none";
+  //loadingDiv.style.display = "none";
+}
+
+async function fetchData(page = currentPage, q = query) {
+  displayLoading();
   const accessToken = localStorage.getItem("accessToken");
   if (accessToken == null) {
     console.log("access token is null");
@@ -21,6 +43,10 @@ async function fetchData(page = 1, q = "") {
         return false;
       } else {
         localStorage.setItem("OrdersData", JSON.stringify(data));
+        currentPage = data.page;
+        totalCount = data.total;
+        orders = data.orders;
+        return data.orders;
       }
     })
     .catch((data) => {
@@ -28,7 +54,7 @@ async function fetchData(page = 1, q = "") {
       return false;
     })
     .finally(() => {
-      loadOrdersDataIntoTable();
+      // hideLoading();
     });
 }
 
@@ -38,15 +64,6 @@ function capitalizeFirstLetter(word) {
 }
 
 function loadOrdersDataIntoTable() {
-  const rawData = localStorage.getItem("OrdersData");
-  if (rawData === null) {
-    return false;
-  }
-  const data = JSON.parse(rawData);
-  const orders = data.orders;
-  const page = data.page;
-  const total = data.total;
-
   const tableBody = document.querySelector("tbody");
   tableBody.innerHTML = "";
 
@@ -69,8 +86,61 @@ function loadOrdersDataIntoTable() {
     )}</td>`;
     rowElement.innerHTML = rowData;
     tableBody.appendChild(rowElement);
+    hideLoading();
   }
 }
+
+const displayButtons = () => {
+  const itemsPerPage = 50;
+  numberOfPages = Math.ceil(totalCount / itemsPerPage);
+  const btns = [];
+  for (let i = 0; i < numberOfPages; i++) {
+    const btn = `<button class="page-btn ${
+      index === i ? "active-btn" : "null "
+    }" data-index="${i}">
+      ${i + 1}
+      </button>`;
+    btns.push(btn);
+  }
+  btns.push(`<button class="next-btn">next</button>`);
+  btns.unshift(`<button class="prev-btn">prev</button>`);
+  btnContainer.innerHTML = btns.join("");
+};
+
+const setupUI = () => {
+  loadOrdersDataIntoTable();
+  displayButtons();
+};
+
+const init = async () => {
+  await fetchData();
+  setupUI();
+};
+
+btnContainer.addEventListener("click", function (e) {
+  if (e.target.classList.contains("btn-container")) return;
+  if (e.target.classList.contains("page-btn")) {
+    index = parseInt(e.target.dataset.index);
+    currentPage = parseInt(e.target.dataset.index) + 1;
+  }
+  if (e.target.classList.contains("next-btn")) {
+    index++;
+    currentPage++;
+    if (index > numberOfPages - 1) {
+      index = numberOfPages - 1;
+      currentPage = numberOfPages;
+    }
+  }
+  if (e.target.classList.contains("prev-btn")) {
+    index--;
+    currentPage--;
+    if (index < 0) {
+      index = 0;
+      currentPage = 1;
+    }
+  }
+  init();
+});
 
 // Get the input field
 const search = document.getElementById("search");
@@ -80,13 +150,11 @@ search.addEventListener("keypress", async function (event) {
   // If the user presses the "Enter" key on the keyboard
   if (event.key === "Enter") {
     event.preventDefault();
-    const query = event.target.value;
-    await fetchData(undefined, query);
+    query = event.target.value;
+    index = 0;
+    currentPage = 1;
+    init();
   }
 });
 
-fetchData();
-
-// toogleButton.addEventListener("change", (e) => {
-//   displayGraphData();
-// });
+init();

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Orders</title>
     <link rel="stylesheet" href="../css/dashboard.css" />
+    <link rel="stylesheet" href="../css/orders.css" />
     <link rel="stylesheet" href="../css/style.css" />
     <script defer src="../js/orders.js"></script>
     <script defer src="../js/util.js"></script>
@@ -23,6 +24,9 @@
         <p>Orders</p>
         <input type="text" id="search" placeholder="Search" />
         <div id="table">
+          <div class="loader-container">
+            <div class="spinner"></div>
+          </div>
           <table>
             <thead>
               <th>Product Name</th>
@@ -33,7 +37,7 @@
             <tbody></tbody>
           </table>
         </div>
-      </div>
+        <div class="btn-container"></div>
     </main>
   </body>
 </html>

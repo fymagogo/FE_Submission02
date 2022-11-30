@@ -35,6 +35,14 @@ function logOut() {
   window.location.href = "../../index.html";
 }
 
+function displayLoading() {
+  loaderContainer.style.display = "block";
+}
+
+function hideLoading() {
+  loaderContainer.style.display = "none";
+}
+
 refreshToken();
 
 const navbarItems = document.querySelector(".sidenav").querySelectorAll("a");
