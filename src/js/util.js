@@ -1,7 +1,7 @@
 "use strict";
 
 const refreshButton = document.getElementById("refresh");
-const logoutButton = document.getElementById("logout");
+const logout = document.getElementById("logout");
 
 function refreshToken() {
   const refreshToken = localStorage.getItem("refreshToken");
@@ -32,15 +32,19 @@ function refreshToken() {
 
 function logOut() {
   localStorage.clear();
-  window.location.href = "./index.html";
+  window.location.href = "../../index.html";
 }
 
 refreshToken();
 
-const navbar = document.querySelector(".sidenav").querySelectorAll("a");
-navbar.forEach((item) => {
+const navbarItems = document.querySelector(".sidenav").querySelectorAll("a");
+navbarItems.forEach((item) => {
   item.addEventListener("click", function () {
-    hamburger.forEach((e) => e.classList.remove("active"));
+    navbarItems.forEach((e) => e.classList.remove("active"));
     item.classList.toggle("active");
   });
+});
+
+logout.addEventListener("click", function () {
+  logOut();
 });

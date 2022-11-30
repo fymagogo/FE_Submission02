@@ -5,12 +5,16 @@ const graphLabel = document.getElementById("graph-label");
 const todayMetrics = document.getElementById("today-submetrics");
 const lastWeekMetrics = document.getElementById("last-week-submetrics");
 const lastMonthMetrics = document.getElementById("last-month-submetrics");
+const dollarUS = Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
 
 async function fetchData() {
   const accessToken = localStorage.getItem("accessToken");
   if (accessToken == null) {
-    console.log("case");
-    //window.location.href = "./index.html";
+    console.log("access token is null");
+    window.location.href = "../../index.html";
   }
 
   await fetch("https://freddy.codesubmit.io/dashboard", {
@@ -31,7 +35,7 @@ async function fetchData() {
     })
     .catch((data) => {
       console.error("fetch error:", data.msg);
-      //logOut();
+      return false;
     })
     .finally(() => {
       loadBestSellersDataIntoTable();
@@ -52,12 +56,14 @@ function loadBestSellersDataIntoTable() {
   tableBody.innerHTML = "";
 
   for (const row of bestsellers) {
-    const price = row.revenue / row.units;
+    const price = dollarUS.format(row.revenue / row.units);
+    const revenue = dollarUS.format(row.revenue);
+    const units = Intl.NumberFormat().format(row.units);
     const rowElement = document.createElement("tr");
     const rowData = `<td>${row.product.name}</td>
-                    <td>$${price}</td>
-                    <td>${row.units}</td>
-                    <td>$${row.revenue}</td>`;
+                    <td>${price}</td>
+                    <td>${units}</td>
+                    <td>${revenue}</td>`;
     rowElement.innerHTML = rowData;
     tableBody.appendChild(rowElement);
   }
@@ -73,14 +79,6 @@ function displayGraphData() {
   let data = isYearlyData
     ? parsedData.dashboard.sales_over_time_year
     : parsedData.dashboard.sales_over_time_week;
-
-  const sorted = Object.keys(data)
-    .sort()
-    .reduce((accumulator, key) => {
-      accumulator[key] = data[key];
-
-      return accumulator;
-    }, {});
 
   var keys = Object.keys(data);
   var values = Object.values(data);
@@ -161,37 +159,36 @@ function displayMetricsData() {
   }
   const parsedData = JSON.parse(rawData);
 
-  var weekKeys = Object.keys(parsedData.dashboard.sales_over_time_week);
-  //   const sumWithInitial = weekKeys.reduce(
-  //     (accumulator, currentValue, currentIndex) => accumulator + currentValue,
-  //     initialValue
-  //   );
+  var weekObjectValues = Object.values(
+    parsedData.dashboard.sales_over_time_week
+  );
+  var initialWeekOrders = weekObjectValues.reduce((a, b) => a + b.orders, 0);
+  var initialWeekTotal = weekObjectValues.reduce((a, b) => a + b.total, 0);
+
   var todayValues = parsedData.dashboard.sales_over_time_week["1"];
   var todayOrders = todayValues.orders;
   var todayTotal = todayValues.total;
   var lastMonthValues = parsedData.dashboard.sales_over_time_year["2"];
   var lastMonthOrders = lastMonthValues.orders;
   var lastMonthTotal = lastMonthValues.total;
+  var lastWeekOrders = initialWeekOrders - todayOrders; //assumption made is that last week is all days - today
+  var lastWeekTotals = initialWeekTotal - todayTotal; //assumption made is that last week is all days - today
 
   var todaySpan = todayMetrics.querySelector("span");
+  var lastWeekSpan = lastWeekMetrics.querySelector("span");
   var lastMonthSpan = lastMonthMetrics.querySelector("span");
-  todaySpan.innerText = `$${todayTotal} / ${todayOrders} orders`;
-  lastMonthSpan.innerText = `$${lastMonthTotal} / ${lastMonthOrders} orders`;
+  todaySpan.innerText = `${dollarUS.format(
+    todayTotal
+  )} / ${todayOrders} orders`;
+  lastMonthSpan.innerText = `${dollarUS.format(
+    lastMonthTotal
+  )} / ${lastMonthOrders} orders`;
+  lastWeekSpan.innerText = `${dollarUS.format(
+    lastWeekTotals
+  )} / ${lastWeekOrders} orders`;
 }
-// function getDashboardDataFromCache(dataKey) {
-//   const rawData = localStorage.getItem("dashboardData");
-//   if (rawData === null) {
-//     return false;
-//   }
-//   const data = JSON.parse(rawData);
-
-//   return `${data}.dashboard.${dataKey}`;
-// }
-
-// console.log(getDashboardDataFromCache("bestsellers"));
 
 fetchData();
-//displayGraphData();
 
 toogleButton.addEventListener("change", (e) => {
   displayGraphData();
