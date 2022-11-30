@@ -1,4 +1,5 @@
 "use strict";
+
 let index = 0;
 let pages = [];
 let currentPage = 1;
@@ -7,8 +8,21 @@ let totalCount = 0;
 let query = "";
 let orders = [];
 const btnContainer = document.querySelector(".btn-container");
+const loaderContainer = document.querySelector(".loader-container");
+const loadingDiv = document.getElementById("loading");
+
+function displayLoading() {
+  loaderContainer.style.display = "block";
+  //loadingDiv.style.display = "block";
+}
+
+function hideLoading() {
+  loaderContainer.style.display = "none";
+  //loadingDiv.style.display = "none";
+}
 
 async function fetchData(page = currentPage, q = query) {
+  displayLoading();
   const accessToken = localStorage.getItem("accessToken");
   if (accessToken == null) {
     console.log("access token is null");
@@ -38,6 +52,9 @@ async function fetchData(page = currentPage, q = query) {
     .catch((data) => {
       console.error("fetch error:", data.msg);
       return false;
+    })
+    .finally(() => {
+      // hideLoading();
     });
 }
 
@@ -69,6 +86,7 @@ function loadOrdersDataIntoTable() {
     )}</td>`;
     rowElement.innerHTML = rowData;
     tableBody.appendChild(rowElement);
+    hideLoading();
   }
 }
 
@@ -121,8 +139,6 @@ btnContainer.addEventListener("click", function (e) {
       currentPage = 1;
     }
   }
-  console.log(index);
-  console.log(currentPage);
   init();
 });
 
