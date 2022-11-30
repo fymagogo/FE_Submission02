@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Orders</title>
+    <link rel="stylesheet" href="../css/dashboard.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <script defer src="../js/orders.js"></script>
+    <script defer src="../js/util.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+
+  <body>
+    <main id="main-container">
+      <div class="sidenav">
+        <img src="../../logo.svg" alt="Freddy's Logo" style="width: 50px" />
+        <a href="../pages/dashboard.html">Dashboard</a>
+        <a href="#" class="active">Orders</a>
+        <a href="#" id="logout">Logout</a>
+      </div>
+      <div class="main">
+        <p>Orders</p>
+        <input type="text" id="search" placeholder="Search" />
+        <div id="table">
+          <table>
+            <thead>
+              <th>Product Name</th>
+              <th>Date</th>
+              <th>Price</th>
+              <th>Status</th>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
